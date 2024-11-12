@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "frontend-java-app.fullname" . }}-test-connection"
+  labels:
+    {{- include "frontend-java-app.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "frontend-java-app.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
